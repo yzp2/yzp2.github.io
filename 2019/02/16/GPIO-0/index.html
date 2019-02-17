@@ -14,7 +14,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="">
+<html class="theme-next pisces use-motion" lang="zh-CN">
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -96,14 +96,14 @@
 
 
 
-  <meta name="description" content="//  GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。GPIO基本知识简介GPIO是通用输入输出端口的简称,STM32芯片的GPIO引脚与外部设备连接起来,从而实现与外部通讯、控制以及数据采集的功能。所有的GPIO都挂载在APB2总线上。 GPIO基本功能STM32芯片的GPI">
+  <meta name="description" content="GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。GPIO基本知识简介GPIO是通用输入输出端口的简称,STM32芯片的GPIO引脚与外部设备连接起来,从而实现与外部通讯、控制以及数据采集的功能。所有的GPIO都挂载在APB2总线上。 GPIO基本功能STM32芯片的GPIO被分成">
 <meta name="keywords" content="基础知识总结">
 <meta property="og:type" content="article">
 <meta property="og:title" content="GPIO">
 <meta property="og:url" content="https://yzp2.github.io/2019/02/16/GPIO-0/index.html">
-<meta property="og:site_name" content="Yzp">
-<meta property="og:description" content="//  GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。GPIO基本知识简介GPIO是通用输入输出端口的简称,STM32芯片的GPIO引脚与外部设备连接起来,从而实现与外部通讯、控制以及数据采集的功能。所有的GPIO都挂载在APB2总线上。 GPIO基本功能STM32芯片的GPI">
-<meta property="og:locale" content="default">
+<meta property="og:site_name" content="Yzp&#39;s blog">
+<meta property="og:description" content="GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。GPIO基本知识简介GPIO是通用输入输出端口的简称,STM32芯片的GPIO引脚与外部设备连接起来,从而实现与外部通讯、控制以及数据采集的功能。所有的GPIO都挂载在APB2总线上。 GPIO基本功能STM32芯片的GPIO被分成">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://a.hiphotos.baidu.com/exp/w=480/sign=fb6be949c8fc1e17fdbf8d397a91f67c/562c11dfa9ec8a13dbe509bff003918fa1ecc0f6.jpg">
 <meta property="og:image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1550344411339&di=46a448f3d7dc905e8d3eba704c7f407b&imgtype=0&src=http%3A%2F%2Fimage.mamicode.com%2Finfo%2F201609%2F20180110211609511519.png">
 <meta property="og:image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1550394878930&di=d56f322ac11e3afae1baba683ed3e4d8&imgtype=0&src=http%3A%2F%2Fimage001.server110.com%2F20170413%2F4b8839b2f4e858079baad960114d3150.png">
@@ -112,10 +112,10 @@
 <meta property="og:image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1550395330673&di=330d95dd56491d013f633d6cea73d545&imgtype=0&src=http%3A%2F%2Fs11.sinaimg.cn%2Fmw690%2F002rsiqVzy6V9jfWAMqca">
 <meta property="og:image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1550395572195&di=88a8ffa3d0b7eda1f165dd84d4dd1c85&imgtype=0&src=http%3A%2F%2Fimg.it610.com%2Fimage%2Finfo5%2F1ce812465b4b4615aa91f018b929ea54.jpg">
 <meta property="og:image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1550990412&di=649c9100d86a2b41ff0e6e3e7f297af7&imgtype=jpg&er=1&src=http%3A%2F%2Fs15.sinaimg.cn%2Fmw690%2F002rsiqVzy6V9jzIsh0be">
-<meta property="og:updated_time" content="2019-02-17T08:07:05.951Z">
+<meta property="og:updated_time" content="2019-02-17T09:48:38.353Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="GPIO">
-<meta name="twitter:description" content="//  GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。GPIO基本知识简介GPIO是通用输入输出端口的简称,STM32芯片的GPIO引脚与外部设备连接起来,从而实现与外部通讯、控制以及数据采集的功能。所有的GPIO都挂载在APB2总线上。 GPIO基本功能STM32芯片的GPI">
+<meta name="twitter:description" content="GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。GPIO基本知识简介GPIO是通用输入输出端口的简称,STM32芯片的GPIO引脚与外部设备连接起来,从而实现与外部通讯、控制以及数据采集的功能。所有的GPIO都挂载在APB2总线上。 GPIO基本功能STM32芯片的GPIO被分成">
 <meta name="twitter:image" content="http://a.hiphotos.baidu.com/exp/w=480/sign=fb6be949c8fc1e17fdbf8d397a91f67c/562c11dfa9ec8a13dbe509bff003918fa1ecc0f6.jpg">
 
 
@@ -133,7 +133,7 @@
   };
 </script>
 
-  <title>GPIO | Yzp</title>
+  <title>GPIO | Yzp's blog</title>
   
 
 
@@ -174,7 +174,7 @@
 
 </head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -192,7 +192,7 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Yzp</span>
+        <span class="site-title">Yzp's blog</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -201,7 +201,7 @@
   </div>
 
   <div class="site-nav-toggle">
-    <button aria-label="Toggle navigation bar">
+    <button aria-label="切换导航栏">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -229,7 +229,58 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>Startseite</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
 
   </li>
         
@@ -246,7 +297,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>Archiv</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
 
   </li>
 
@@ -307,7 +358,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yzp">
+      <meta itemprop="name" content="Yzp's blog">
     </span>
 
     
@@ -334,14 +385,14 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">发表于</span>
               
 
               
                 
               
 
-              <time title="Post created: 2019-02-16 23:09:14" itemprop="dateCreated datePublished" datetime="2019-02-16T23:09:14+08:00">2019-02-16</time>
+              <time title="创建时间：2019-02-16 23:09:14" itemprop="dateCreated datePublished" datetime="2019-02-16T23:09:14+08:00">2019-02-16</time>
             
 
             
@@ -356,13 +407,31 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 
-                  <span class="post-meta-item-text">Edited on</span>
+                  <span class="post-meta-item-text">更新于</span>
                 
-                <time title="Updated at: 2019-02-17 16:07:05" itemprop="dateModified" datetime="2019-02-17T16:07:05+08:00">2019-02-17</time>
+                <time title="修改时间：2019-02-17 17:48:38" itemprop="dateModified" datetime="2019-02-17T17:48:38+08:00">2019-02-17</time>
               
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/Testing/" itemprop="url" rel="index"><span itemprop="name">Testing</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -392,7 +461,7 @@
       
 
       
-        <h2 id="GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。"><a href="#GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。" class="headerlink" title="//  GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。"></a>//  GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。</h2><h1 id="GPIO基本知识"><a href="#GPIO基本知识" class="headerlink" title="GPIO基本知识"></a>GPIO基本知识</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>GPIO是通用输入输出端口的简称,STM32芯片的GPIO引脚与外部设备连接起来,从而实现与外部通讯、控制以及数据采集的功能。所有的GPIO都挂载在APB2总线上。</p>
+        <h2 id="GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。"><a href="#GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。" class="headerlink" title="GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。"></a>GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。</h2><h1 id="GPIO基本知识"><a href="#GPIO基本知识" class="headerlink" title="GPIO基本知识"></a>GPIO基本知识</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>GPIO是通用输入输出端口的简称,STM32芯片的GPIO引脚与外部设备连接起来,从而实现与外部通讯、控制以及数据采集的功能。所有的GPIO都挂载在APB2总线上。</p>
 <h2 id="GPIO基本功能"><a href="#GPIO基本功能" class="headerlink" title="GPIO基本功能"></a>GPIO基本功能</h2><p>STM32芯片的GPIO被分成很多组,每组有16个引脚。所有的GPIO引脚都有基本的输入输出功能。<br><strong>最基本的输出功能:</strong>由STM32控制引脚输出高、低电平实现开关控制。<br><strong>最基本的输出功能:</strong>检测外部输入电平,如把GPIO引脚连接到按键,通过电平高低区分按键是否被按下。</p>
 <h2 id="GPIO框图分析"><a href="#GPIO框图分析" class="headerlink" title="GPIO框图分析"></a>GPIO框图分析</h2><p><img src="http://a.hiphotos.baidu.com/exp/w=480/sign=fb6be949c8fc1e17fdbf8d397a91f67c/562c11dfa9ec8a13dbe509bff003918fa1ecc0f6.jpg" alt="GPIO框图" title="GPIO框图"><br>1.最右端代表STM32芯片引出的GPIO引脚其余部件都位于芯片内部。</p>
 <p>2.保护二极管及上、下拉电阻引脚的两个保护二级管可以防止引脚外部过高或过低的电压输入,当引脚电压高于VDD时,上方的二极管导通,当引脚电压低于VSS时,下方的二极管导通,防止不正常电压引入芯片导致芯片烧毁。但仍不能直接外接大功率驱动器件,如直接驱动电机,强制驱动要么电机不转,要么导致芯片烧坏,必须要加大功率及隔离电路驱动。</p>
@@ -511,10 +580,10 @@
       
         <ul class="sidebar-nav motion-element">
           <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Inhaltsverzeichnis
+            文章目录
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Übersicht
+            站点概览
           </li>
         </ul>
       
@@ -535,25 +604,38 @@
                   <a href="/archives/">
                 
                     <span class="site-state-item-count">2</span>
-                    <span class="site-state-item-name">Artikel</span>
+                    <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
               
 
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                    <span class="site-state-item-count">1</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
               
 
               
                 
                 
                 <div class="site-state-item site-state-tags">
-                  
+                  <a href="/tags/index.html">
                     
                     
                       
                     
                     <span class="site-state-item-count">1</span>
-                    <span class="site-state-item-name">Tags</span>
-                  
+                    <span class="site-state-item-name">标签</span>
+                  </a>
                 </div>
               
             </nav>
@@ -587,7 +669,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。"><span class="nav-number">1.</span> <span class="nav-text">//  GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#GPIO基本知识"><span class="nav-number"></span> <span class="nav-text">GPIO基本知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO基本功能"><span class="nav-number">2.</span> <span class="nav-text">GPIO基本功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO框图分析"><span class="nav-number">3.</span> <span class="nav-text">GPIO框图分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO的八种模式"><span class="nav-number">4.</span> <span class="nav-text">GPIO的八种模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GPIO寄存器"><span class="nav-number"></span> <span class="nav-text">GPIO寄存器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GPIO功能"><span class="nav-number"></span> <span class="nav-text">GPIO功能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编程相关"><span class="nav-number"></span> <span class="nav-text">编程相关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一般方法"><span class="nav-number">1.</span> <span class="nav-text">一般方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关库函数"><span class="nav-number">2.</span> <span class="nav-text">相关库函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO位带操作（我不是很懂）"><span class="nav-number">3.</span> <span class="nav-text">GPIO位带操作（我不是很懂）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作IO口输出高低电平的三种方法：库函数-寄存器-位带"><span class="nav-number">4.</span> <span class="nav-text">操作IO口输出高低电平的三种方法：库函数,寄存器,位带</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#写在后面"><span class="nav-number"></span> <span class="nav-text">写在后面</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。"><span class="nav-number">1.</span> <span class="nav-text">GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#GPIO基本知识"><span class="nav-number"></span> <span class="nav-text">GPIO基本知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO基本功能"><span class="nav-number">2.</span> <span class="nav-text">GPIO基本功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO框图分析"><span class="nav-number">3.</span> <span class="nav-text">GPIO框图分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO的八种模式"><span class="nav-number">4.</span> <span class="nav-text">GPIO的八种模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GPIO寄存器"><span class="nav-number"></span> <span class="nav-text">GPIO寄存器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GPIO功能"><span class="nav-number"></span> <span class="nav-text">GPIO功能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编程相关"><span class="nav-number"></span> <span class="nav-text">编程相关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一般方法"><span class="nav-number">1.</span> <span class="nav-text">一般方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关库函数"><span class="nav-number">2.</span> <span class="nav-text">相关库函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO位带操作（我不是很懂）"><span class="nav-number">3.</span> <span class="nav-text">GPIO位带操作（我不是很懂）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作IO口输出高低电平的三种方法：库函数-寄存器-位带"><span class="nav-number">4.</span> <span class="nav-text">操作IO口输出高低电平的三种方法：库函数,寄存器,位带</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#写在后面"><span class="nav-number"></span> <span class="nav-text">写在后面</span></a></li></div>
             
 
           </div>
@@ -619,7 +701,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
 
 
 
@@ -627,7 +709,7 @@
 
 
 
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.0.0</div>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.0.0</div>
 
 
 
@@ -679,6 +761,12 @@
 
 
 
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
 
 
 
