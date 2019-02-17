@@ -14,7 +14,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="">
+<html class="theme-next pisces use-motion" lang="">
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -72,7 +72,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Pisces',
     version: '7.0.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
@@ -96,19 +96,26 @@
 
 
 
-  <meta name="description" content="GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误或不妥的地方，欢迎大家指出。GPIO基本知识简介GPIO是通用输入输出端口的简称,STM32芯片的GPIO引脚与外部设备连接起来,从而实现与外部通讯、控制以及数据采集的功能。 GPIO基本功能STM32芯片的GPIO被分成很多组,每组有16个引脚。所有的GPIO引脚">
+  <meta name="description" content="//  GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。GPIO基本知识简介GPIO是通用输入输出端口的简称,STM32芯片的GPIO引脚与外部设备连接起来,从而实现与外部通讯、控制以及数据采集的功能。所有的GPIO都挂载在APB2总线上。 GPIO基本功能STM32芯片的GPI">
 <meta name="keywords" content="基础知识总结">
 <meta property="og:type" content="article">
 <meta property="og:title" content="GPIO">
 <meta property="og:url" content="https://yzp2.github.io/2019/02/16/GPIO-0/index.html">
 <meta property="og:site_name" content="Yzp">
-<meta property="og:description" content="GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误或不妥的地方，欢迎大家指出。GPIO基本知识简介GPIO是通用输入输出端口的简称,STM32芯片的GPIO引脚与外部设备连接起来,从而实现与外部通讯、控制以及数据采集的功能。 GPIO基本功能STM32芯片的GPIO被分成很多组,每组有16个引脚。所有的GPIO引脚">
+<meta property="og:description" content="//  GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。GPIO基本知识简介GPIO是通用输入输出端口的简称,STM32芯片的GPIO引脚与外部设备连接起来,从而实现与外部通讯、控制以及数据采集的功能。所有的GPIO都挂载在APB2总线上。 GPIO基本功能STM32芯片的GPI">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://a.hiphotos.baidu.com/exp/w=480/sign=fb6be949c8fc1e17fdbf8d397a91f67c/562c11dfa9ec8a13dbe509bff003918fa1ecc0f6.jpg">
-<meta property="og:updated_time" content="2019-02-16T16:15:56.814Z">
+<meta property="og:image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1550344411339&di=46a448f3d7dc905e8d3eba704c7f407b&imgtype=0&src=http%3A%2F%2Fimage.mamicode.com%2Finfo%2F201609%2F20180110211609511519.png">
+<meta property="og:image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1550394878930&di=d56f322ac11e3afae1baba683ed3e4d8&imgtype=0&src=http%3A%2F%2Fimage001.server110.com%2F20170413%2F4b8839b2f4e858079baad960114d3150.png">
+<meta property="og:image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1550395072151&di=623dc09afb0c27fbf658f9ab91f52a81&imgtype=0&src=http%3A%2F%2Fc.51hei.com%2Fa%2Fa%2Fb%2F56816403740843.jpg">
+<meta property="og:image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1550989889&di=be2b015269cc29097e3bd45ad0f03792&imgtype=jpg&er=1&src=http%3A%2F%2Fblog.chinaunix.net%2Fattachment%2F201106%2F20%2F22666248_1308575948p33j.jpg">
+<meta property="og:image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1550395330673&di=330d95dd56491d013f633d6cea73d545&imgtype=0&src=http%3A%2F%2Fs11.sinaimg.cn%2Fmw690%2F002rsiqVzy6V9jfWAMqca">
+<meta property="og:image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1550395572195&di=88a8ffa3d0b7eda1f165dd84d4dd1c85&imgtype=0&src=http%3A%2F%2Fimg.it610.com%2Fimage%2Finfo5%2F1ce812465b4b4615aa91f018b929ea54.jpg">
+<meta property="og:image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1550990412&di=649c9100d86a2b41ff0e6e3e7f297af7&imgtype=jpg&er=1&src=http%3A%2F%2Fs15.sinaimg.cn%2Fmw690%2F002rsiqVzy6V9jzIsh0be">
+<meta property="og:updated_time" content="2019-02-17T08:07:05.951Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="GPIO">
-<meta name="twitter:description" content="GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误或不妥的地方，欢迎大家指出。GPIO基本知识简介GPIO是通用输入输出端口的简称,STM32芯片的GPIO引脚与外部设备连接起来,从而实现与外部通讯、控制以及数据采集的功能。 GPIO基本功能STM32芯片的GPIO被分成很多组,每组有16个引脚。所有的GPIO引脚">
+<meta name="twitter:description" content="//  GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。GPIO基本知识简介GPIO是通用输入输出端口的简称,STM32芯片的GPIO引脚与外部设备连接起来,从而实现与外部通讯、控制以及数据采集的功能。所有的GPIO都挂载在APB2总线上。 GPIO基本功能STM32芯片的GPI">
 <meta name="twitter:image" content="http://a.hiphotos.baidu.com/exp/w=480/sign=fb6be949c8fc1e17fdbf8d397a91f67c/562c11dfa9ec8a13dbe509bff003918fa1ecc0f6.jpg">
 
 
@@ -249,9 +256,6 @@
   
 
   
-    
-
-  
 
   
 </nav>
@@ -271,6 +275,9 @@
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
+          
+            
+
           
           <div id="content" class="content">
             
@@ -351,7 +358,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Updated at: 2019-02-17 00:15:56" itemprop="dateModified" datetime="2019-02-17T00:15:56+08:00">2019-02-17</time>
+                <time title="Updated at: 2019-02-17 16:07:05" itemprop="dateModified" datetime="2019-02-17T16:07:05+08:00">2019-02-17</time>
               
             
           </span>
@@ -385,37 +392,34 @@
       
 
       
-        <h2 id="GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误或不妥的地方，欢迎大家指出。"><a href="#GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误或不妥的地方，欢迎大家指出。" class="headerlink" title="GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误或不妥的地方，欢迎大家指出。"></a>GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误或不妥的地方，欢迎大家指出。</h2><h1 id="GPIO基本知识"><a href="#GPIO基本知识" class="headerlink" title="GPIO基本知识"></a>GPIO基本知识</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>GPIO是通用输入输出端口的简称,STM32芯片的GPIO引脚与外部设备连接起来,从而实现与外部通讯、控制以及数据采集的功能。</p>
-<h2 id="GPIO基本功能"><a href="#GPIO基本功能" class="headerlink" title="GPIO基本功能"></a>GPIO基本功能</h2><p>STM32芯片的GPIO被分成很多组,每组有16个引脚。所有的GPIO引脚都有基本的输入输出功能。</p>
-<p><strong>最基本的输出功能:</strong>由STM32控制引脚输出高、低电平实现开关控制。</p>
-<p><strong>最基本的输出功能:</strong>检测外部输入电平,如把GPIO引脚连接到按键,通过电平高低区分按键是否被按下。</p>
-<h2 id="GPIO框图分析"><a href="#GPIO框图分析" class="headerlink" title="GPIO框图分析"></a>GPIO框图分析</h2><p><img src="http://a.hiphotos.baidu.com/exp/w=480/sign=fb6be949c8fc1e17fdbf8d397a91f67c/562c11dfa9ec8a13dbe509bff003918fa1ecc0f6.jpg" alt="GPIO框图" title="GPIO框图"></p>
-<p>1.最右端代表STM32芯片引出的GPIO引脚其余部件都位于芯片内部。</p>
+        <h2 id="GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。"><a href="#GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。" class="headerlink" title="//  GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。"></a>//  GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。</h2><h1 id="GPIO基本知识"><a href="#GPIO基本知识" class="headerlink" title="GPIO基本知识"></a>GPIO基本知识</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>GPIO是通用输入输出端口的简称,STM32芯片的GPIO引脚与外部设备连接起来,从而实现与外部通讯、控制以及数据采集的功能。所有的GPIO都挂载在APB2总线上。</p>
+<h2 id="GPIO基本功能"><a href="#GPIO基本功能" class="headerlink" title="GPIO基本功能"></a>GPIO基本功能</h2><p>STM32芯片的GPIO被分成很多组,每组有16个引脚。所有的GPIO引脚都有基本的输入输出功能。<br><strong>最基本的输出功能:</strong>由STM32控制引脚输出高、低电平实现开关控制。<br><strong>最基本的输出功能:</strong>检测外部输入电平,如把GPIO引脚连接到按键,通过电平高低区分按键是否被按下。</p>
+<h2 id="GPIO框图分析"><a href="#GPIO框图分析" class="headerlink" title="GPIO框图分析"></a>GPIO框图分析</h2><p><img src="http://a.hiphotos.baidu.com/exp/w=480/sign=fb6be949c8fc1e17fdbf8d397a91f67c/562c11dfa9ec8a13dbe509bff003918fa1ecc0f6.jpg" alt="GPIO框图" title="GPIO框图"><br>1.最右端代表STM32芯片引出的GPIO引脚其余部件都位于芯片内部。</p>
 <p>2.保护二极管及上、下拉电阻引脚的两个保护二级管可以防止引脚外部过高或过低的电压输入,当引脚电压高于VDD时,上方的二极管导通,当引脚电压低于VSS时,下方的二极管导通,防止不正常电压引入芯片导致芯片烧毁。但仍不能直接外接大功率驱动器件,如直接驱动电机,强制驱动要么电机不转,要么导致芯片烧坏,必须要加大功率及隔离电路驱动。</p>
-<p>3.P-MOS管和N-MOS管</p>
-<p>GPIO 引脚线路经过两个保护二极管后,向上流向“输入模式”结构,向下流向“输出模式”结构。输出模式部分,线路经过一个由P-MOS和N-MOS管组成的单元电路。这个结构使 GPIO具有了“推挽输出”和“开漏输出”两种模式。</p>
+<p>3.P-MOS管和N-MOS管<br>GPIO 引脚线路经过两个保护二极管后,向上流向“输入模式”结构,向下流向“输出模式”结构。输出模式部分,线路经过一个由P-MOS和N-MOS管组成的单元电路。这个结构使 GPIO具有了“推挽输出”和“开漏输出”两种模式。</p>
 <p>推挽输出模式,是根据这两个MOS管的工作方式来命名的。在该结构中输入高电平时,经过反向后,上方的P-MOS导通,下方的N-MOS关闭,对外输出高电平；而在该结构中输入低电平时,经过反向后,N-MOS管导通,P-MOS关闭,对外输出低电平。当引脚高低电平切换时,两个管子轮流导通,P 管负责灌电流,N 管负责拉电流,使其负载能力和开关速度都比普通的方式有很大的提高。推挽输出的低电平为 0伏,高电平为3.3伏。</p>
 <p>开漏输出模式时,上方的P-MOS管完全不工作。如果我们控制输出为0,低电平,则P-MOS管关闭,N-MOS管导通,使输出接地,若控制输出为1(它无法直接输出高电平)时,则P-MOS管和N-MOS管都关闭,所以引脚既不输出高电平,也不输出低电平,为高阻态。为正常使用时必须外部接上拉电阻。</p>
 <p>推挽输出模式一般应用在输出电平为0和3.3伏而且需要高速切换开关状态的场合。在STM32的应用中,除了必须用开漏模式的场合,都习惯使用推挽输出模式。开漏输出一般应用在 I2C、SMBUS 通讯等需要“线与”功能(“线与”特性即若有很多个开漏模式引脚连接到一起时,只有当所有引脚都输出高阻态,才由上拉电阻提供高电平,此高电平的电压为外部上拉电阻所接的电源的电压。若其中一个引脚为低电平,那线路就相当于短路接地,使得整条线路都为低电平,0伏。)的总线电路中。除此之外,还用在电平不匹配的场合,如需要输出5伏的高电平,就可以在外部接一个上拉电阻,上拉电源为5伏,并且把GPIO设置为开漏模式,当输出高阻态时,由上拉电阻和电源向外输出5伏的电平。(关于这两种模式我也不是很理解)</p>
-<p>4.输出数据寄存器</p>
-<p>前面提到的双MOS管结构电路的输入信号，是由GPIO“输出数据寄存器<br>GPIOx_ODR”提供的,通过修改输出数据寄存器的值就可以修改GPIO引脚的输出电平。而“置位/复位寄存器 GPIOx_BSRR”可以通过修改输出数据寄存器的值从而影响电路的输出。</p>
-<p>5.复用功能输出</p>
-<p>“复用功能输出”中的“复用”是指STM32的其它片上外设对GPIO引脚进行控制,此时GPIO引脚用作该外设功能的一部分,算是第二用途。从其它外设引出来的“复用功能输出信号”与GPIO本身的数据据寄存器都连接到双MOS管结构的输入中,通过图中的梯形结构作为开关切换选择。</p>
-<p>6.输入数据寄存器</p>
-<p>看GPIO结构框图的上半部分,GPIO引脚经过内部的上、下拉电阻,可以配置成上/下拉输入,然后再连接到施密特触发器,信号经过触发器后,模拟信号转化为0、1的数字信号,然后存储在“输入数据寄存器 GPIOx_IDR”中,通过读取该寄存器就可以了解GPIO引脚的电平状态。</p>
-<p>7.复用功能输入</p>
-<p>与“复用功能输出”模式类似,在“复用功能输入模式”,GPIO引脚的信号传输到STM32其它片上外设,由该外设读取引脚状态。</p>
-<p>8.模拟输入输出</p>
-<p>当 GPIO 引脚用于ADC采集电压的输入通道时,用作“模拟输入”功能,此时信号是不经过施密特触发器的,因为经过施密特触发器后信号只有0、1两种状态,所以ADC外设要采集到原始的模拟信号,信号源输入必须在施密特触发器之前。类似地,当GPIO引脚用于DAC作为模拟电压输出通道时,此时作为“模拟输出”功能,DAC的模拟信号输出就不经过双MOS管结构,模拟信号直接输出到引脚。</p>
+<p>4.输出数据寄存器<br>前面提到的双MOS管结构电路的输入信号，是由GPIO“输出数据寄存器<br>GPIOx_ODR”提供的,通过修改输出数据寄存器的值就可以修改GPIO引脚的输出电平。而“置位/复位寄存器 GPIOx_BSRR”可以通过修改输出数据寄存器的值从而影响电路的输出。</p>
+<p>5.复用功能输出<br>“复用功能输出”中的“复用”是指STM32的其它片上外设对GPIO引脚进行控制,此时GPIO引脚用作该外设功能的一部分,算是第二用途。从其它外设引出来的“复用功能输出信号”与GPIO本身的数据据寄存器都连接到双MOS管结构的输入中,通过图中的梯形结构作为开关切换选择。</p>
+<p>6.输入数据寄存器<br>看GPIO结构框图的上半部分,GPIO引脚经过内部的上、下拉电阻,可以配置成上/下拉输入,然后再连接到施密特触发器,信号经过触发器后,模拟信号转化为0、1的数字信号,然后存储在“输入数据寄存器 GPIOx_IDR”中,通过读取该寄存器就可以了解GPIO引脚的电平状态。</p>
+<p>7.复用功能输入<br>与“复用功能输出”模式类似,在“复用功能输入模式”,GPIO引脚的信号传输到STM32其它片上外设,由该外设读取引脚状态。</p>
+<p>8.模拟输入输出<br>当 GPIO 引脚用于ADC采集电压的输入通道时,用作“模拟输入”功能,此时信号是不经过施密特触发器的,因为经过施密特触发器后信号只有0、1两种状态,所以ADC外设要采集到原始的模拟信号,信号源输入必须在施密特触发器之前。类似地,当GPIO引脚用于DAC作为模拟电压输出通道时,此时作为“模拟输出”功能,DAC的模拟信号输出就不经过双MOS管结构,模拟信号直接输出到引脚。</p>
 <h2 id="GPIO的八种模式"><a href="#GPIO的八种模式" class="headerlink" title="GPIO的八种模式"></a>GPIO的八种模式</h2><p><strong>由GPIO的结构决定了GPIO可以配置成以下模式：</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">typedef enum</span><br><span class="line">&#123;</span><br><span class="line">GPIO_Mode_AIN = 0x0, // 模拟输入</span><br><span class="line">GPIO_Mode_IN_FLOATING = 0x04, // 浮空输入</span><br><span class="line">GPIO_Mode_IPD = 0x28, // 下拉输入</span><br><span class="line">GPIO_Mode_IPU = 0x48, // 上拉输入</span><br><span class="line">GPIO_Mode_Out_OD = 0x14, // 开漏输出</span><br><span class="line">GPIO_Mode_Out_PP = 0x10, // 推挽输出</span><br><span class="line">GPIO_Mode_AF_OD = 0x1C, // 复用开漏输出</span><br><span class="line">GPIO_Mode_AF_PP = 0x18 // 复用推挽输出</span><br><span class="line">&#125;GPIOMode_TypeDef;</span><br></pre></td></tr></table></figure></p>
 <p><strong>可归类为三类:</strong></p>
-<p>1.输入模式(模拟/浮空/上拉/下拉)</p>
-<p><strong>在输入模式时,施密特触发器打开,输出被禁止</strong>,可通过输入数据寄存器 GPIOx_IDR读取I/O状态。其中输入模式,可设置为上拉、下拉、浮空和模拟输入四种。上拉和下拉输入很好理解,默认的电平由上拉或者下拉决定。浮空输入的电平是不确定的,完全由外部的输入决定,一般接按键的时候用的是这个模式。模拟输入用于ADC采集。</p>
-<p>2.输出模式(推挽/开漏)</p>
-<p>在输出模式中,推挽模式时双MOS管以轮流方式工作,输出数据寄存器GPIOx_ODR可控制I/O输出高低电平。开漏模式时只有N-MOS管工作,输出数据寄存器可控制I/O输出高阻态或低电平。输出速度可配置,有2MHz\10MHz\50MHz的选项。此处的输出速度即I/O支持的高低电平状态最高切换频率，支持的频率越高,功耗越大,如果功耗要求不严格，把速度设置成最大即可。<strong>在输出模式时施密特触发器是打开的,即输入可用,</strong>通过输入数据寄存器GPIOx_IDR可读取I/O的实际状态。</p>
-<p>4.复用功能(推挽/开漏)</p>
-<p>复用功能模式中,输出使能,输出速度可配置,可工作在开漏及推挽模式,但是输出信号源于其它外设,输出数据寄存器GPIOx_ODR无效；输入可用,通过输入数据寄存器可获取I/O实际状态,但一般直接用外设的寄存器来获取该数据信号。</p>
-<h1 id="GPIO寄存器"><a href="#GPIO寄存器" class="headerlink" title="GPIO寄存器"></a>GPIO寄存器</h1><p>##　端口配置低寄存器 端口配置低寄存器(GPIOx_CRL) (x=A..E)</p>
+<p>1.输入模式(模拟/浮空/上拉/下拉)<br><strong>在输入模式时,施密特触发器打开,输出被禁止</strong>,可通过输入数据寄存器 GPIOx_IDR读取I/O状态。其中输入模式,可设置为上拉、下拉、浮空和模拟输入四种。上拉和下拉输入很好理解,默认的电平由上拉或者下拉决定。浮空输入的电平是不确定的,完全由外部的输入决定,一般接按键的时候用的是这个模式。模拟输入用于ADC采集。</p>
+<p>2.输出模式(推挽/开漏)<br>在输出模式中,推挽模式时双MOS管以轮流方式工作,输出数据寄存器GPIOx_ODR可控制I/O输出高低电平。开漏模式时只有N-MOS管工作,输出数据寄存器可控制I/O输出高阻态或低电平。输出速度可配置,有2MHz\10MHz\50MHz的选项。此处的输出速度即I/O支持的高低电平状态最高切换频率，支持的频率越高,功耗越大,如果功耗要求不严格，把速度设置成最大即可。<strong>在输出模式时施密特触发器是打开的,即输入可用,</strong>通过输入数据寄存器GPIOx_IDR可读取I/O的实际状态。</p>
+<p>3.复用功能(推挽/开漏)<br>复用功能模式中,输出使能,输出速度可配置,可工作在开漏及推挽模式,但是输出信号源于其它外设,输出数据寄存器GPIOx_ODR无效；输入可用,通过输入数据寄存器可获取I/O实际状态,但一般直接用外设的寄存器来获取该数据信号。</p>
+<h1 id="GPIO寄存器"><a href="#GPIO寄存器" class="headerlink" title="GPIO寄存器"></a>GPIO寄存器</h1><p>每个GPI/O端口有两个32位配置寄存器(GPIOx_CRL,GPIOx_CRH),两个32位数据寄存器(GPIOx_IDR和GPIOx_ODR),一个32位置位/复位寄存器(GPIOx_BSRR),一个16位复位寄存器(GPIOx_BRR)和一个32位锁定寄存器(GPIOx_LCKR)。<br><strong>1.端口配置低寄存器(GPIOx_CRL) (x=A..E)</strong><br><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1550344411339&amp;di=46a448f3d7dc905e8d3eba704c7f407b&amp;imgtype=0&amp;src=http%3A%2F%2Fimage.mamicode.com%2Finfo%2F201609%2F20180110211609511519.png" alt="端口配置低寄存器图" title="端口配置低寄存器图"><br>STM32的CRL控制着每组IO端口A~G的低8位的模式。每个IO端口的位占用CRL的4个位,高两位为CNF,低两位为MODE。这里我们可以记住几个常用的配置,比如 0X0 表示模拟输入模式（ADC用）、0X3表示推挽输出模式（做输出口用,50M 速率）、0X8表示上/下拉输入模式（做输入口用）、0XB表示复用输出（使用IO口的第二功能,50M速率。<br><strong>２.端口配置高寄存器(GPIOx_CRH) (x=A..E)</strong><br><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1550394878930&amp;di=d56f322ac11e3afae1baba683ed3e4d8&amp;imgtype=0&amp;src=http%3A%2F%2Fimage001.server110.com%2F20170413%2F4b8839b2f4e858079baad960114d3150.png" alt="端口配置高寄存器图" title="端口配置高寄存器图"><br>CRH的作用和CRL完全一样,只是CRL控制的是低8位输出口,而CRH控制的是高8位输出口。<br><strong>3.端口输入数据寄存器(GPIOx_IDR) (x=A..E)</strong><br><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1550395072151&amp;di=623dc09afb0c27fbf658f9ab91f52a81&amp;imgtype=0&amp;src=http%3A%2F%2Fc.51hei.com%2Fa%2Fa%2Fb%2F56816403740843.jpg" alt="端口输入数据寄存器图" title="端口输入数据寄存器图"><br>IDR是一个端口输入数据寄存器,只用了低16位。该寄存器为只读寄存器,并且只能以16位的形式读出。<br><strong>4.端口输出数据寄存器(GPIOx_ODR) (x=A..E)</strong><br><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1550989889&amp;di=be2b015269cc29097e3bd45ad0f03792&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fblog.chinaunix.net%2Fattachment%2F201106%2F20%2F22666248_1308575948p33j.jpg" alt="端口输出数据寄存器图" title="端口输出数据寄存器图"><br>ODR是一个端口输出数据寄存器,也只用了低16位。该寄存器为可读写,从该寄存器读出来的数据可以用于判断当前IO口的输出状态。而向该寄存器写数据,则可以控制某个IO口的输出电平。<br><strong>5.端口位设置/清除寄存器(GPIOx_BSRR) (x=A..E)</strong><br><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1550395330673&amp;di=330d95dd56491d013f633d6cea73d545&amp;imgtype=0&amp;src=http%3A%2F%2Fs11.sinaimg.cn%2Fmw690%2F002rsiqVzy6V9jfWAMqca" alt="端口位设置/清除寄存器图" title="端口位设置/清除寄存器图"><br>BSRR寄存器是端口位设置/清除寄存器。该寄存器和ODR寄存器具有类似的作用,都可以用来设置GPIO端口的输出位是1还是0。该寄存器往相应位写0 是无影响的,所以我们要设置某些位,可以不用管其他位的值。<br><strong>6.端口位清除寄存器(GPIOx_BRR) (x=A..E)</strong><br><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1550395572195&amp;di=88a8ffa3d0b7eda1f165dd84d4dd1c85&amp;imgtype=0&amp;src=http%3A%2F%2Fimg.it610.com%2Fimage%2Finfo5%2F1ce812465b4b4615aa91f018b929ea54.jpg" alt="端口位清除寄存器图" title="端口位清除寄存器图"><br>BRR寄存器是端口位清除寄存器。该寄存器的作用跟BSRR的高16位雷同。<br><strong>7.端口配置锁定寄存器(GPIOx_LCKR) (x=A..E)</strong><br><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1550990412&amp;di=649c9100d86a2b41ff0e6e3e7f297af7&amp;imgtype=jpg&amp;er=1&amp;src=http%3A%2F%2Fs15.sinaimg.cn%2Fmw690%2F002rsiqVzy6V9jzIsh0be" alt="端口配置锁定寄存器图" title="端口配置锁定寄存器图"></p>
+<p>在GPIO外设中,控制端口高低控制寄存器CRH和CRL可以配置每个GPIO的工作模式和工作的速度,每4个位控制一个IO,CRH控制端口的高八位,CRL控制端口的低8位。</p>
+<h1 id="GPIO功能"><a href="#GPIO功能" class="headerlink" title="GPIO功能"></a>GPIO功能</h1><p>1.通用I/O(GPIO)<br>2.单独的位设置或位清除<br>3.外部中断/唤醒线<br>所有端口都有外部中断能力。为了使用外部中断线,端口必须配置成输入模式。<br>4.复用功能(AF)<br>5.软件重新映射I/O复用功能<br>6.GPIO锁定机制<br>7.输入配置<br>8.输出配置<br>9.复用功能配置<br>10.模拟输入配置<br>11.外设的GPIO配置<br>(详见中文参考手册)</p>
+<h1 id="编程相关"><a href="#编程相关" class="headerlink" title="编程相关"></a>编程相关</h1><h2 id="一般方法"><a href="#一般方法" class="headerlink" title="一般方法"></a>一般方法</h2><p>1.选择IO口<br>2.使能时钟<br>3.配置IO口引脚，模式，速率<br>4.初始化<br>5.操作IO口<br><strong>注意：</strong>初始化要在每次配置完一个或几个引脚后就初始化,不能最后一起初始化。<br><strong>实例</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">void GPIO_Config()                   </span><br><span class="line">	&#123;       </span><br><span class="line">	GPIO_InitTypeDef GPIO_InitStructure;</span><br><span class="line">	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE,ENABLE);//使能时钟</span><br><span class="line">	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_4;//引脚</span><br><span class="line">	GPIO_InitStructure.GPIO_Mode=GPIO_Mode_Out_PP;//模式</span><br><span class="line">	GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;//速率</span><br><span class="line">	GPIO_Init(GPIOE,&amp;GPIO_InitStructure);//不能最后一起写这个</span><br><span class="line">	</span><br><span class="line">	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC,ENABLE);</span><br><span class="line">	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_12;</span><br><span class="line">	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU; </span><br><span class="line">        GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;	</span><br><span class="line">	GPIO_Init(GPIOC, &amp;GPIO_InitStructure); </span><br><span class="line">	</span><br><span class="line">	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE,ENABLE);</span><br><span class="line">	GPIO_InitStructure.GPIO_Pin=GPIO_Pin_2;	</span><br><span class="line">	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU; 		  </span><br><span class="line">	GPIO_Init(GPIOE, &amp;GPIO_InitStructure); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="相关库函数"><a href="#相关库函数" class="headerlink" title="相关库函数"></a>相关库函数</h2><p>1.使能时钟void RCC_APB2PeriphClockCmd(uint32_t RCC_APB2Periph, FunctionalState NewState)<br>2.在固件库中操作IDR寄存器读取IO端口数据是通过GPIO_ReadInputDataBit函数实现的：uint8_t GPIO_ReadInputDataBit(GPIO_TypeDef<em> GPIOx, uint16_t GPIO_Pin)<br>3.在固件库中设置ODR寄存器的值来控制IO口的输出状态是通过函数 GPIO_Write来实现的：void GPIO_Write(GPIO_TypeDef</em> GPIOx, uint16_t PortVal)<br>4.在STM32固件库中，通过BSRR和BRR寄存器设置GPIO端口输出是通过函数GPIO_SetBits()和函数GPIO_ResetBits()来完成的。<br>void GPIO_SetBits(GPIO_TypeDef<em> GPIOx, uint16_t GPIO_Pin);<br>void GPIO_ResetBits(GPIO_TypeDef</em> GPIOx, uint16_t GPIO_Pin)<br>5.初始化IO参数。调用函数GPIO_Init()</p>
+<h2 id="GPIO位带操作（我不是很懂）"><a href="#GPIO位带操作（我不是很懂）" class="headerlink" title="GPIO位带操作（我不是很懂）"></a>GPIO位带操作（我不是很懂）</h2><p>位操作就是可以单独的对一个比特位读和写。在STM32中,有两个地方实现了位带,一个是SRAM区的最低1MB空间,令一个是外设区最低1MB空间。这两个1MB的空间除了可以像正常的RAM一样操作外,他们还有自己的位带别名区，位带别名区把这1MB的空间的每一个位膨胀成一个32位的字,当访问位带别名区的这些字时,就可以达到访问位带区某个比特位的目的。<br>我们可以通过指针的形式访问位带别名区地址从而达到操作位带区比特位的效果。<br>公式：把“位带地址+位序号”转换成别名区地址统一成一个宏。</p>
+<p>从手册中我们可以知道ODR和IDR这两个寄存器对应GPIO基址的偏移是12和8,我们先实现这两个寄存器的地址映射,其中GPIOx_BASE在库函数里面有定义。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// GPIO ODR 和 IDR 寄存器地址映射</span><br><span class="line">#define GPIOA_ODR_Addr (GPIOA_BASE+12) //0x4001080C</span><br><span class="line">#define GPIOB_ODR_Addr (GPIOB_BASE+12) //0x40010C0C</span><br><span class="line">#define GPIOC_ODR_Addr (GPIOC_BASE+12) //0x4001100C</span><br><span class="line">#define GPIOD_ODR_Addr (GPIOD_BASE+12) //0x4001140C</span><br><span class="line">#define GPIOE_ODR_Addr (GPIOE_BASE+12) //0x4001180C</span><br><span class="line">#define GPIOF_ODR_Addr (GPIOF_BASE+12) //0x40011A0C</span><br><span class="line">#define GPIOG_ODR_Addr (GPIOG_BASE+12) //0x40011E0C</span><br><span class="line"></span><br><span class="line">#define GPIOA_IDR_Addr (GPIOA_BASE+8) //0x40010808</span><br><span class="line">#define GPIOB_IDR_Addr (GPIOB_BASE+8) //0x40010C08</span><br><span class="line">#define GPIOC_IDR_Addr (GPIOC_BASE+8) //0x40011008</span><br><span class="line">#define GPIOD_IDR_Addr (GPIOD_BASE+8) //0x40011408</span><br><span class="line">#define GPIOE_IDR_Addr (GPIOE_BASE+8) //0x40011808</span><br><span class="line">#define GPIOF_IDR_Addr (GPIOF_BASE+8) //0x40011A08</span><br><span class="line">#define GPIOG_IDR_Addr (GPIOG_BASE+8) //0x40011E08</span><br></pre></td></tr></table></figure></p>
+<p><strong>GPIO输入输出位操作</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// 单独操作 GPIO 的某一个 IO 口，n(0,1,2...16),n 表示具体是哪一个 IO 口</span><br><span class="line">#define PAout(n) BIT_ADDR(GPIOA_ODR_Addr,n) //输出</span><br><span class="line">#define PAin(n) BIT_ADDR(GPIOA_IDR_Addr,n) //输入</span><br><span class="line"></span><br><span class="line">#define PBout(n) BIT_ADDR(GPIOB_ODR_Addr,n) //输出</span><br><span class="line">#define PBin(n) BIT_ADDR(GPIOB_IDR_Addr,n) //输入</span><br><span class="line"> </span><br><span class="line">#define PCout(n) BIT_ADDR(GPIOC_ODR_Addr,n) //输出</span><br><span class="line">#define PCin(n) BIT_ADDR(GPIOC_IDR_Addr,n) //输入</span><br><span class="line"></span><br><span class="line">#define PDout(n) BIT_ADDR(GPIOD_ODR_Addr,n) //输出</span><br><span class="line">#define PDin(n) BIT_ADDR(GPIOD_IDR_Addr,n) //输入</span><br><span class="line"></span><br><span class="line">#define PEout(n) BIT_ADDR(GPIOE_ODR_Addr,n) //输出</span><br><span class="line">#define PEin(n) BIT_ADDR(GPIOE_IDR_Addr,n) //输入</span><br><span class="line"></span><br><span class="line">#define PFout(n) BIT_ADDR(GPIOF_ODR_Addr,n) //输出</span><br><span class="line">#define PFin(n) BIT_ADDR(GPIOF_IDR_Addr,n) //输入</span><br><span class="line"> </span><br><span class="line">#define PGout(n) BIT_ADDR(GPIOG_ODR_Addr,n) //输出</span><br><span class="line">#define PGin(n) BIT_ADDR(GPIOG_IDR_Addr,n) //输入</span><br></pre></td></tr></table></figure></p>
+<h2 id="操作IO口输出高低电平的三种方法：库函数-寄存器-位带"><a href="#操作IO口输出高低电平的三种方法：库函数-寄存器-位带" class="headerlink" title="操作IO口输出高低电平的三种方法：库函数,寄存器,位带"></a>操作IO口输出高低电平的三种方法：库函数,寄存器,位带</h2><p>用库函数实现的好处是在各个STM32芯片上面的移植性非常好,不需要修改任何代码。<br>用位带操作的好处是简洁。</p>
+<h1 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h1><p>我是第一次写博客，掌握的知识还不多，也有很多地方不懂，欢迎大家批评指正。<br><strong><em>我所写的都是参考的《STM32F1开发指南V3.1库函数版本ALIENTEK  战舰STM32F103开发板教程》、《零死角玩转STM32–基于野火F103[霸道]》以及《STM32F10x中文参考手册》。</em></strong></p>
 
       
     </div>
@@ -583,7 +587,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误或不妥的地方，欢迎大家指出。"><span class="nav-number">1.</span> <span class="nav-text">GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误或不妥的地方，欢迎大家指出。</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#GPIO基本知识"><span class="nav-number"></span> <span class="nav-text">GPIO基本知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO基本功能"><span class="nav-number">2.</span> <span class="nav-text">GPIO基本功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO框图分析"><span class="nav-number">3.</span> <span class="nav-text">GPIO框图分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO的八种模式"><span class="nav-number">4.</span> <span class="nav-text">GPIO的八种模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GPIO寄存器"><span class="nav-number"></span> <span class="nav-text">GPIO寄存器</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。"><span class="nav-number">1.</span> <span class="nav-text">//  GPIO是STM32中比较基础的部分之一，也是比较重要的一部分，我将总结一下有关GPIO的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#GPIO基本知识"><span class="nav-number"></span> <span class="nav-text">GPIO基本知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO基本功能"><span class="nav-number">2.</span> <span class="nav-text">GPIO基本功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO框图分析"><span class="nav-number">3.</span> <span class="nav-text">GPIO框图分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO的八种模式"><span class="nav-number">4.</span> <span class="nav-text">GPIO的八种模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GPIO寄存器"><span class="nav-number"></span> <span class="nav-text">GPIO寄存器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GPIO功能"><span class="nav-number"></span> <span class="nav-text">GPIO功能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编程相关"><span class="nav-number"></span> <span class="nav-text">编程相关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一般方法"><span class="nav-number">1.</span> <span class="nav-text">一般方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关库函数"><span class="nav-number">2.</span> <span class="nav-text">相关库函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPIO位带操作（我不是很懂）"><span class="nav-number">3.</span> <span class="nav-text">GPIO位带操作（我不是很懂）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作IO口输出高低电平的三种方法：库函数-寄存器-位带"><span class="nav-number">4.</span> <span class="nav-text">操作IO口输出高低电平的三种方法：库函数,寄存器,位带</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#写在后面"><span class="nav-number"></span> <span class="nav-text">写在后面</span></a></li></div>
             
 
           </div>
@@ -623,7 +627,7 @@
 
 
 
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.0.0</div>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.0.0</div>
 
 
 
@@ -711,7 +715,9 @@
   
 
 
-  <script src="/js/src/schemes/muse.js?v=7.0.0"></script>
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
 
 
 
@@ -765,5 +771,6 @@
 
   
 
+  
 </body>
 </html>
