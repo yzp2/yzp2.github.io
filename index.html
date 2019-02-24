@@ -336,6 +336,205 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yzp2.github.io/2019/02/24/NVIC/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="尤哲鹏">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yzp's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/02/24/NVIC/" class="post-title-link" itemprop="url">NVIC</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-02-24 08:47:17 / 修改时间：14:00:08" itemprop="dateCreated datePublished" datetime="2019-02-24T08:47:17+08:00">2019-02-24</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="NVIC是中断中经常用到的。我将总结一下有关NVIC的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。"><a href="#NVIC是中断中经常用到的。我将总结一下有关NVIC的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。" class="headerlink" title="NVIC是中断中经常用到的。我将总结一下有关NVIC的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。"></a>NVIC是中断中经常用到的。我将总结一下有关NVIC的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。</h2><h1 id="NVIC基本知识"><a href="#NVIC基本知识" class="headerlink" title="NVIC基本知识"></a>NVIC基本知识</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>NVIC是嵌套向量中断控制器，控制着整个芯片中断相关的功能，它跟内核紧密耦合，是内核里面的一个外设。但是各个芯片厂商在设计芯片的时候会对Cortex-M3内核里面的NVIC进行裁剪，把不需要的部分去掉，所以说STM32的NVIC是Cortex-M3的NVIC的一个子集。（如无特别说明，异常就是中断，中断就是异常）</p>
+<h2 id="中断类型"><a href="#中断类型" class="headerlink" title="中断类型"></a>中断类型</h2><p>CM3内核支持256个中断，其中包含了16个内核中断和240个外部中断，并且具有256级的可编程中断设置。但STM32并没有使用CM3内核的全部东西，而是只用了它的一部分。STM32有84个中断，包括16个内核中断和68个可屏蔽中断，具有16级可编程的中断优先级。而我们常用的就是这68个可屏蔽中断，但是STM32的68个可屏蔽中断，在STM32F103系列上面，又只有60个（在107系列才有68个）。<br>F103在内核水平上搭载了一个异常响应系统，支持为数众多的系统异常和外部中断。其中系统异常有8个（如果把Reset和HardFault也算上的话就是10个），外部中断有60个。除了个别异常的优先级被定死外，其它异常的优先级都是可编程的。有关具体的系统异常和外部中断可在标准库文件 stm32f10x.h 这个头文件查询到，在 IRQn_Type 这个结构体里面包含了F103系列全部的异常声明。</p>
+<h2 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h2><h3 id="概念解释"><a href="#概念解释" class="headerlink" title="概念解释"></a>概念解释</h3><p>在NVIC有一个专门的寄存器：中断优先级寄存器NVIC_IPRx，用来配置外部中断的优先级，IPR宽度为8bit，原则上每个外部中断可配置的优先级为0~255，数值越小，优先级越高。但是绝大多数CM3芯片都会精简设计，以致实际上支持的优先级数减少，在F103中，只使用了高4bit用于表达优先级的这4bit，又被分组成抢占优先级（主优先级）和子优先级（响应优先级）。</p>
+<h3 id="优先顺序"><a href="#优先顺序" class="headerlink" title="优先顺序"></a>优先顺序</h3><p>如果有多个中断同时响应，抢占优先级高的就会 抢占 抢占优先级低的优先得到执行（即数值小的抢占优先级先执行），如果抢占优先级相同，就比较子优先级。如果抢占优先级和子优先级都相同的话，就比较他们的硬件中断编号，编号越小，优先级越高。<br><strong>注意两点：</strong>第一，如果两个中断的抢占优先级和响应优先级都是一样的话，则看哪个中断先发生就先执行；第二，高优先级的抢占优先级是可以打断正在进行的低抢占优先级中断的。而抢占优先级相同的中断，高优先级的响应优先级不可以打断低响应优先级的中断。</p>
+<h3 id="优先级分组"><a href="#优先级分组" class="headerlink" title="优先级分组"></a>优先级分组</h3><p><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1550982561118&amp;di=1e883ac1f35841039316f362d6ac0c37&amp;imgtype=0&amp;src=http%3A%2F%2Fediterupload.eepw.com.cn%2Ffetch%2F20161101%2F317044_1_0.jpg" alt="优先级分组真值表" title="优先级分组真值表"></p>
+<h3 id="中断优先级设置的步骤："><a href="#中断优先级设置的步骤：" class="headerlink" title="中断优先级设置的步骤："></a>中断优先级设置的步骤：</h3><p>1.系统运行开始的时候设置中断分组。确定组号，也就是确定抢占优先级和子优先级的分配位数。调用函数为NVIC_PriorityGroupConfig()<br>2.设置所用到的中断的中断优先级别。对每个中断调用函数为 NVIC_Init()</p>
+<h1 id="中断寄存器"><a href="#中断寄存器" class="headerlink" title="中断寄存器"></a>中断寄存器</h1><p><strong>ISER[8]：</strong>ISER全称是：Interrupt Set-Enable Registers，这是一个中断使能寄存器组。STM32F103的可屏蔽中断只有60个，所以对我们来说，有用的就是两个（ISER[0]和ISER[1]），总共可以表示64个中断。而STM32F103只用了其中的前60位。ISER[0]的bit0~bit31分别对应中断0~31。ISER[1]的bit0~27对应中断32~59；具体每一位对应哪个中断，可以参考stm32f10x.h里面的第140行处及之后（针对编译器MDK5来说）。<br><strong>ICER[8]：</strong>全称是：Interrupt Clear-Enable Registers，是一个中断除能寄存器组。该寄存器组与ISER的作用恰好相反，是用来清除某个中断的使能的。其对应位的功能，也和ICER一样。这里要专门设置一个 ICER来清除中断位，而不是向ISER写0来清除，是因为NVIC的这些寄存器都是写1有效的，写0是无效的。<br><strong>ISPR[8]：</strong>全称是：Interrupt Set-Pending Registers，是一个中断挂起控制寄存器组。每个位对应的中断和ISER是一样的。通过置1，可以将正在进行的中断挂起，而执行同级或更高级别的中断。写0是无效的。<br><strong>ICPR[8]：</strong>全称是：Interrupt Clear-Pending Registers，是一个中断解挂控制寄存器组。其作用与ISPR相反，对应位也和ISER是一样的。通过设置1，可以将挂起的中断接挂。写0无效。<br><strong>IABR[8]：</strong>全称是：Interrupt Active Bit Registers，是一个中断激活标志位寄存器组。对应位所代表的中断和ISER一样，如果为1，则表示该位所对应的中断正在被执行。这是一个只读寄存器，通过它可以知道当前在执行的中断是哪一个。在中断执行完了由硬件自动清零。<br><strong>IP[240]：</strong>全称是：Interrupt Priority Registers，是一个中断优先级控制的寄存器组。<br>IP寄存器组由240个8bit的寄存器组成，每个可屏蔽中断占用8bit，这样总共可以表示240个可屏蔽中断。而STM32只用到了其中的前60个。IP[59]~IP[0]分别对应中断59~0。而每个可屏蔽中断占用的8bit并没有全部使用，而是只用了高4位。这4位又分为抢占优先级和子优先级。抢占优先级在前，子优先级在后。而这两个优先级各占几个位又要根据SCB-&gt;AIRCR中的中断分组设置来决定。</p>
+<p>与NVIC相关的寄存器，MDK为其定义了如下的结构体(NVIC结构体定义，来自固件库头文件：core_cm3.h)：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">typedef struct &#123;</span><br><span class="line">__IO uint32_t ISER[8]; // 中断使能寄存器</span><br><span class="line">uint32_t RESERVED0[24];</span><br><span class="line">__IO uint32_t ICER[8]; // 中断清除寄存器</span><br><span class="line">uint32_t RSERVED1[24];</span><br><span class="line">__IO uint32_t ISPR[8]; // 中断使能悬起寄存器</span><br><span class="line">uint32_t RESERVED2[24];</span><br><span class="line">__IO uint32_t ICPR[8]; // 中断清除悬起寄存器</span><br><span class="line">uint32_t RESERVED3[24];</span><br><span class="line">__IO uint32_t IABR[8]; // 中断有效位寄存器</span><br><span class="line">uint32_t RESERVED4[56];</span><br><span class="line">__IO uint8_t IP[240]; // 中断优先级寄存器(8Bit wide)</span><br><span class="line">uint32_t RESERVED5[644];</span><br><span class="line">__O uint32_t STIR; // 软件触发中断寄存器</span><br><span class="line">&#125; NVIC_Type;</span><br></pre></td></tr></table></figure></p>
+<h1 id="编程相关"><a href="#编程相关" class="headerlink" title="编程相关"></a>编程相关</h1><h2 id="符合CMSIS标准的NVIC库函数"><a href="#符合CMSIS标准的NVIC库函数" class="headerlink" title="符合CMSIS标准的NVIC库函数"></a>符合CMSIS标准的NVIC库函数</h2><p>固件库文件core_cm3.h的最后，还提供了NVIC的一些函数，这些函数遵循CMSIS规则，只要是Cortex-M3的处理器都可以使用。然而，<strong>这些库函数我们在编程的时候用的都比较少，甚至基本都不用。</strong></p>
+<table>
+<thead>
+<tr>
+<th>NVIC库函数</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>void NVIC_EnableIRQ(IRQn_Type IRQn)</td>
+<td style="text-align:center">使能中断</td>
+</tr>
+<tr>
+<td>void NVIC_DisableIRQ(IRQn_Type IRQn)</td>
+<td style="text-align:center">失能中断</td>
+</tr>
+<tr>
+<td>void NVIC_SetPendingIRQ(IRQn_Type IRQn)</td>
+<td style="text-align:center">设置中断悬起位</td>
+</tr>
+<tr>
+<td>void NVIC_ClearPendingIRQ(IRQn_Type IRQn)</td>
+<td style="text-align:center">清除中断悬起位</td>
+</tr>
+<tr>
+<td>uint32_t NVIC_GetPendingIRQ(IRQn_Type IRQn)</td>
+<td style="text-align:center">获取悬起中断编号</td>
+</tr>
+<tr>
+<td>void NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)</td>
+<td style="text-align:center">设置中断优先级</td>
+</tr>
+<tr>
+<td>uint32_t NVIC_GetPriority(IRQn_Type IRQn)</td>
+<td style="text-align:center">获取中断优先级</td>
+</tr>
+<tr>
+<td>void NVIC_SystemReset(void)</td>
+<td style="text-align:center">系统复位</td>
+</tr>
+</tbody>
+</table>
+<h2 id="编程方法"><a href="#编程方法" class="headerlink" title="编程方法"></a>编程方法</h2><p>1.使能外设某个中断，这个具体由每个外设的相关中断使能位控制。比如串口有发送完成中断，接收完成中断，这两个中断都由串口控制寄存器的相关中断使能位控制。<br>2.初始化NVIC_InitTypeDef结构体，配置中断优先级分组，设置抢占优先级和子优先级。NVIC_InitTypeDef 结构体在固件库头文件 misc.h中定义。<br>3.使能中断请求。<br>4。编写中断服务函数<br>在启动文件 startup_stm32f10x_hd.s 中我们预先为每个中断都写了一个中断服务函数，只是这些中断函数都是为空，为的只是初始化中断向量表。实际的中断服务函数都需要我们重新编写，为了方便管理我们把中断服务函数统一写在 stm32f10x_it.c这个库文件中。<br>关于中断服务函数的函数名必须跟启动文件里面预先设置的一样，如果写错，系统就在中断向量表中找不到中断服务函数的入口，直接跳转到启动文件里面预先写好的空函数，并且在里面无限循环，实现不了中断。</p>
+<h2 id="NVIC初始化结构体"><a href="#NVIC初始化结构体" class="headerlink" title="NVIC初始化结构体"></a>NVIC初始化结构体</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">typedef struct &#123;</span><br><span class="line">uint8_t NVIC_IRQChannel; // 中断源</span><br><span class="line">uint8_t NVIC_IRQChannelPreemptionPriority; // 抢占优先级</span><br><span class="line">uint8_t NVIC_IRQChannelSubPriority; // 子优先级</span><br><span class="line">FunctionalState NVIC_IRQChannelCmd; // 中断使能或者失能</span><br><span class="line">&#125; NVIC_InitTypeDef;</span><br></pre></td></tr></table></figure>
+<p>1.NVIC_IROChannel：用来设置中断源，不同的中断中断源不一样，且不可写错，即使写错了程序也不会报错，只会导致不响应中断。具体的成员配置可参考stm32f10x.h头文件里面的IRQn_Type结构体定义，这个结构体包含了所有的中断源。<br>2.NVIC_IRQChannelPreemptionPriority：抢占优先级，具体的值要根据优先级分组来确定。<br>3.NVIC_IRQChannelSubPriority：子优先级，具体的值要根据优先级分组来确定。<br>4.NVIC_IRQChannelCmd：中断使能（ENABLE）或者失能（DISABLE）。操作的是NVIC_ISER和NVIC_ICER这两个寄存器。</p>
+<h2 id="主要的两个函数"><a href="#主要的两个函数" class="headerlink" title="主要的两个函数"></a>主要的两个函数</h2><p>1.void NVIC_PriorityGroupConfig(uint32_t NVIC_PriorityGroup)<br>NVIC中断管理函数主要在misc.c 文件里面。这个函数的作用是对中断的优先级进行分组，这个函数在系统中只能被调用一次，一旦分组确定就最好不要更改。<br>2.void NVIC_Init(NVIC_InitTypeDef* NVIC_InitStruct)</p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">static void USART_NVIC_Config()</span><br><span class="line">&#123;</span><br><span class="line">	NVIC_InitTypeDef NVIC_InitStructure;//Usart1 NVIC 配置</span><br><span class="line">	</span><br><span class="line">	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); //设置NVIC中断分组2:2位抢占优先级，2位响应优先级</span><br><span class="line">        NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn ;</span><br><span class="line">	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3 ;//抢占优先级3</span><br><span class="line">	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		//子优先级3</span><br><span class="line">	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能</span><br><span class="line">	NVIC_Init(&amp;NVIC_InitStructure);	//根据指定的参数初始化VIC寄存器</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h1><p><strong><em>我所写的都是参考的《STM32F1开发指南V3.1库函数版本ALIENTEK  战舰STM32F103开发板教程》、《零死角玩转STM32–基于野火F103[霸道]》以及《STM32F10x中文参考手册》。</em></strong>欢迎大家批评指正。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://yzp2.github.io/2019/02/16/GPIO-0/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -711,7 +910,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-count">3</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
