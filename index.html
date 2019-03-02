@@ -345,6 +345,231 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yzp2.github.io/2019/03/02/gps模块/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="尤哲鹏">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yzp's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2019/03/02/gps模块/" class="post-title-link" itemprop="url">gps模块</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-02 23:17:39" itemprop="dateCreated datePublished" datetime="2019-03-02T23:17:39+08:00">2019-03-02</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-03-03 00:15:02" itemprop="dateModified" datetime="2019-03-03T00:15:02+08:00">2019-03-03</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/模块使用/" itemprop="url" rel="index"><span itemprop="name">模块使用</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="在项目中看GPS模块比较多，在这里做一下总结。"><a href="#在项目中看GPS模块比较多，在这里做一下总结。" class="headerlink" title="在项目中看GPS模块比较多，在这里做一下总结。"></a>在项目中看GPS模块比较多，在这里做一下总结。</h2><h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>GPS模块是集成了RF射频芯片、基带芯片和核心CPU，并加上相关外围电路而组成的一个集成电路。<br>目前GPS模块的GPS芯片大部分采用全球市占率第一的SiRFIII系列为主。由于GPS模块采用的芯片组不一样，性能和价格也有区别，采用SIRF三代芯片组的GPS模块性能最优，价格也要比采用MTK或者MSTAR等GPS芯片组的贵很多。现阶段也持续在芯片升级，比方sirf4，然后又是sirf5，总体灵敏度提高了不少，缩短了定位时间，同时也帮助了客户快速的进入了定位应用状态。</p>
+<h1 id="通信协议"><a href="#通信协议" class="headerlink" title="通信协议"></a>通信协议</h1><p>GPS模块采用NMEA 0183协议，NMEA 0183是美国国家海洋电子协会（National Marine Electronics Association）为海用电子设备制定的标准格式。目前业已成了GPS导航设备统一的RTCM（Radio Technical Commission for Maritime services）标准协议。<br>NMEA-0183协议采用ASCII码来传递GPS定位信息，我们称之为帧。<br>帧格式形如：$aaccc,ddd,ddd,„,ddd<em>hh(CR)(LF)<br>1、“$”：帧命令起始位<br>2、aaccc：地址域，前两位为识别符（aa），后三位为语句名（ccc）<br>3、ddd„ddd：数据<br>4、“</em>”：校验和前缀（也可以作为语句数据结束的标志）<br>5、hh：校验和，$与*之间所有字符ASCII码的校验和（各字节做异或运算，得到校验和后，再转换16进制格式的ASCII字符）<br>6、(CR)(LF)：帧结束，回车和换行符</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th style="text-align:center">说明</th>
+<th style="text-align:center">最大帧长</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$GPGGA</td>
+<td style="text-align:center">GPS定位信息</td>
+<td style="text-align:center">72</td>
+</tr>
+<tr>
+<td>$GPGSA</td>
+<td style="text-align:center">当前卫星信息</td>
+<td style="text-align:center">65</td>
+</tr>
+<tr>
+<td>$GPGSV</td>
+<td style="text-align:center">可见卫星信息</td>
+<td style="text-align:center">210</td>
+</tr>
+<tr>
+<td>$GPRMC</td>
+<td style="text-align:center">推荐定位信息</td>
+<td style="text-align:center">70</td>
+</tr>
+<tr>
+<td>$GPVTG</td>
+<td style="text-align:center">地面速度信息</td>
+<td style="text-align:center">34</td>
+</tr>
+<tr>
+<td>$GPGLL</td>
+<td style="text-align:center">大地坐标信息</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td>$GPZDA</td>
+<td style="text-align:center">当前时间(UTC)信息</td>
+</tr>
+</tbody>
+</table>
+<h2 id="GPRMC（推荐定位信息，Recommended-Minimum-Specific-GPS-Transit-Data）"><a href="#GPRMC（推荐定位信息，Recommended-Minimum-Specific-GPS-Transit-Data）" class="headerlink" title="$GPRMC（推荐定位信息，Recommended Minimum Specific GPS/Transit Data）"></a>$GPRMC（推荐定位信息，Recommended Minimum Specific GPS/Transit Data）</h2><p>一般常用的是$GPRMC，下面介绍一下。<br> $GPRMC,(1),(2),(3),(4),(5),(6),(7),(8),(9),(10),(11),(12)*hh(CR)(LF)<br>1.(1)UTC时间，hhmmss（时分秒）<br>2.(2)定位状态，A=有效定位，V=无效定位<br>3.(3)纬度ddmm.mmmmm（度分）<br>4.(4)纬度半球N（北半球）或S（南半球）<br>5.(5)经度dddmm.mmmmm（度分）<br>6.(6) 经度半球E（东经）或W（西经）<br>7.(7)地面速率（000.0~999.9节）<br>8.(8)地面航向（000.0~359.9度，以真北方为参考基准）<br>9.(9)UTC日期，ddmmyy（日月年）<br>10.(10)磁偏角（000.0~180.0度，前导位数不足则补0）<br>11.(11)磁偏角方向，E（东）或W（西）<br>12.(12)模式指示（A=自主定位，D=差分，E=估算，N=数据无效）</p>
+<h1 id="PC端软件配置"><a href="#PC端软件配置" class="headerlink" title="PC端软件配置"></a>PC端软件配置</h1><p>这个还没有尝试过，可以参考<a href="http://www.cnblogs.com/pingwen/p/5225461.html" target="_blank" rel="noopener">http://www.cnblogs.com/pingwen/p/5225461.html</a></p>
+<h1 id="解码"><a href="#解码" class="headerlink" title="解码"></a>解码</h1><p>我现在看到的比较明白的有两种方式，一种是通过指针读取两个逗号之间的内容，另一种是通过数组读取固定位置的内容。<br><strong>第一种</strong>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">void parseGpsBuffer()</span><br><span class="line">&#123;</span><br><span class="line">	char *subString;</span><br><span class="line">	char *subStringNext;</span><br><span class="line">	char i = 0;</span><br><span class="line">	if (Save_Data.isGetData)//获取到了gps数据</span><br><span class="line">	&#123;</span><br><span class="line">		Save_Data.isGetData = false;</span><br><span class="line">		printf(&quot;**************\r\n&quot;);</span><br><span class="line">		printf(Save_Data.GPS_Buffer);//把&quot;GPRMC/GNRMC&quot;这一帧数据打印出来</span><br><span class="line"></span><br><span class="line">		</span><br><span class="line">		for (i = 0 ; i &lt;= 6 ; i++)</span><br><span class="line">		&#123;</span><br><span class="line">			if (i == 0)</span><br><span class="line">			&#123;</span><br><span class="line">				if ((subString = strstr(Save_Data.GPS_Buffer, &quot;,&quot;)) == NULL)</span><br><span class="line">					errorLog(1);	//解析错误</span><br><span class="line">			&#125;</span><br><span class="line">			else</span><br><span class="line">			&#123;</span><br><span class="line">				subString++;</span><br><span class="line">				if ((subStringNext = strstr(subString, &quot;,&quot;)) != NULL)</span><br><span class="line">				&#123;</span><br><span class="line">					char usefullBuffer[2]; </span><br><span class="line">					switch(i)</span><br><span class="line">					&#123;</span><br><span class="line">						case 1:memcpy(Save_Data.UTCTime, subString, subStringNext - subString);break;	//获取UTC时间</span><br><span class="line">						case 2:memcpy(usefullBuffer, subString, subStringNext - subString);break;	//获取UTC时间</span><br><span class="line">						case 3:memcpy(Save_Data.latitude, subString, subStringNext - subString);break;	//获取纬度信息</span><br><span class="line">						case 4:memcpy(Save_Data.N_S, subString, subStringNext - subString);break;	//获取N/S</span><br><span class="line">						case 5:memcpy(Save_Data.longitude, subString, subStringNext - subString);break;	//获取经度信息</span><br><span class="line">						case 6:memcpy(Save_Data.E_W, subString, subStringNext - subString);break;	//获取E/W</span><br><span class="line"></span><br><span class="line">						default:break;</span><br><span class="line">					&#125;</span><br><span class="line"></span><br><span class="line">					subString = subStringNext;//指向下一区域</span><br><span class="line">					Save_Data.isParseData = true;//解析完成</span><br><span class="line">					if(usefullBuffer[0] == &apos;A&apos;)//读到A正确定位，有效数据</span><br><span class="line">						Save_Data.isUsefull = true;</span><br><span class="line">					else if(usefullBuffer[0] == &apos;V&apos;)//读到V无效数据</span><br><span class="line">						Save_Data.isUsefull = false;</span><br><span class="line"></span><br><span class="line">				&#125;</span><br><span class="line">				else</span><br><span class="line">				&#123;</span><br><span class="line">					errorLog(2);	//解析错误</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>第二种</strong>：附上链接<a href="https://blog.csdn.net/linuxarm123/article/details/78627279" target="_blank" rel="noopener">https://blog.csdn.net/linuxarm123/article/details/78627279</a></p>
+<h1 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h1><p>参考的链接：<a href="https://baike.baidu.com/item/GPS%E6%A8%A1%E5%9D%97/7114349?fr=aladdin" target="_blank" rel="noopener">https://baike.baidu.com/item/GPS%E6%A8%A1%E5%9D%97/7114349?fr=aladdin</a><br><a href="https://blog.csdn.net/linuxarm123/article/details/78627279" target="_blank" rel="noopener">https://blog.csdn.net/linuxarm123/article/details/78627279</a><br>感觉还不太完善，真正写出来才知道自己掌握的并不好，还需要多加学习。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://yzp2.github.io/2019/02/24/NVIC/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -940,7 +1165,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-count">4</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -955,7 +1180,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">1</span>
+                      
+                    
+                    <span class="site-state-item-count">2</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -970,7 +1197,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">1</span>
+                      
+                    
+                    <span class="site-state-item-count">2</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
