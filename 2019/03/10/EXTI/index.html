@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.0.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+  
+
+
+
+
+  <meta name="description" content="EXTI为外部中断/事件控制器，是NVIC的实例应用。我将总结一下有关EXTI的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。EXTI基本知识简介EXTI（External interrupt/event controller）—外部中断/事件控制器，管理了控制器的20个中断/事件线。每个中断/事件线都对应有一个边沿检测器，可以实现输入信号的上升沿检测和下降沿的检测">
+<meta name="keywords" content="基础知识总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EXTI">
+<meta property="og:url" content="https://yzp2.github.io/2019/03/10/EXTI/index.html">
+<meta property="og:site_name" content="Yzp&#39;s blog">
+<meta property="og:description" content="EXTI为外部中断/事件控制器，是NVIC的实例应用。我将总结一下有关EXTI的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。EXTI基本知识简介EXTI（External interrupt/event controller）—外部中断/事件控制器，管理了控制器的20个中断/事件线。每个中断/事件线都对应有一个边沿检测器，可以实现输入信号的上升沿检测和下降沿的检测">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1552226879424&di=73e00062809cd1e237acaf29ad492c11&imgtype=jpg&src=http%3A%2F%2Fimg3.imgtn.bdimg.com%2Fit%2Fu%3D2522246633%2C1802569229%26fm%3D214%26gp%3D0.jpg">
+<meta property="og:updated_time" content="2019-03-10T12:18:14.372Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="EXTI">
+<meta name="twitter:description" content="EXTI为外部中断/事件控制器，是NVIC的实例应用。我将总结一下有关EXTI的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。EXTI基本知识简介EXTI（External interrupt/event controller）—外部中断/事件控制器，管理了控制器的20个中断/事件线。每个中断/事件线都对应有一个边沿检测器，可以实现输入信号的上升沿检测和下降沿的检测">
+<meta name="twitter:image" content="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1552226879424&di=73e00062809cd1e237acaf29ad492c11&imgtype=jpg&src=http%3A%2F%2Fimg3.imgtn.bdimg.com%2Fit%2Fu%3D2522246633%2C1802569229%26fm%3D214%26gp%3D0.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="https://yzp2.github.io/2019/03/10/EXTI/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>EXTI | Yzp's blog</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?a1a3b20e108d472642c325c558798d52";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Yzp's blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yzp2.github.io/2019/03/10/EXTI/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="尤哲鹏">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yzp's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">EXTI
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-03-10 00:43:40 / 修改时间：20:18:14" itemprop="dateCreated datePublished" datetime="2019-03-10T00:43:40+08:00">2019-03-10</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/STM32/" itemprop="url" rel="index"><span itemprop="name">STM32</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="EXTI为外部中断-事件控制器，是NVIC的实例应用。我将总结一下有关EXTI的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。"><a href="#EXTI为外部中断-事件控制器，是NVIC的实例应用。我将总结一下有关EXTI的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。" class="headerlink" title="EXTI为外部中断/事件控制器，是NVIC的实例应用。我将总结一下有关EXTI的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。"></a>EXTI为外部中断/事件控制器，是NVIC的实例应用。我将总结一下有关EXTI的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。</h2><h1 id="EXTI基本知识"><a href="#EXTI基本知识" class="headerlink" title="EXTI基本知识"></a>EXTI基本知识</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>EXTI（External interrupt/event controller）—外部中断/事件控制器，管理了控制器的20个中断/事件线。每个中断/事件线都对应有一个边沿检测器，可以实现输入信号的上升沿检测和下降沿的检测。EXTI 可以实现对每个中断/事件线进行单独配置，可以单独配置为中断或者事件，以及触发事件的属性。<strong>EXTI是在APB2总线上的。</strong></p>
+<h2 id="EXTI框图分析"><a href="#EXTI框图分析" class="headerlink" title="EXTI框图分析"></a>EXTI框图分析</h2><p>EXTI的功能框图包含了EXTI最核心内容，掌握了功能框图，对EXTI就有一个整体的把握，在编程时思路就非常清晰。<br><img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b9999_10000&amp;sec=1552226879424&amp;di=73e00062809cd1e237acaf29ad492c11&amp;imgtype=jpg&amp;src=http%3A%2F%2Fimg3.imgtn.bdimg.com%2Fit%2Fu%3D2522246633%2C1802569229%26fm%3D214%26gp%3D0.jpg" alt="EXTI框图" title="EXTI框图"><br>一个斜杠并标注“20”字样，这个表示在控制器内部类似的信号线路有20 个，这与EXTI总共有20个中断/事件线是吻合的。<br><strong>注意编号</strong><br>1.输入线，EXTI 控制器有19个中断/事件输入线，这些输入线可以通过寄存器设置为任意一个 GPIO，也可以是一些外设的事件。输入线一般是存在电平变化的信号。<br>2.边沿检测电路，它会根据上升沿触发选择寄存器(EXTI_RTSR)和下降沿<br>触发选择寄存器(EXTI_FTSR)对应位的设置来控制信号触发。边沿检测电路以输入线作为信号输入端，如果检测到有边沿跳变就输出有效信号 1 给 NVIC 控制器，否则输出无效信号0。而 EXTI_RTSR 和 EXTI_FTSR 两个寄存器可以控制器需要检测哪些类型的电平跳变过程，可以是只有上升沿触发、只有下降沿触发或者上升沿和下降沿都触发。<br>3.边沿检测电路左侧第一个电路（月牙形），实际就是一个或门电路，它一个输入来自编号2电路，另外一个输入来自软件中断事件寄存器(EXTI_SWIER)。EXTI_SWIER允许我们通过程序控制就可以启动中断/事件线，这在某些地方非常有用。或门电路，所以这两个输入随便一个有有效信号1就可以输出1给再左侧两个半圆形电路。<br>4.上面的半圆形电路是一个与门电路，它一个输入是3中的电路，另外一个输入来自中断屏蔽寄存器(EXTI_IMR)。与门电路导致的结果是如果EXTI_IMR设置为0时，不管3电路的输出信号是1还 0，最终4的电路输出的信号都为0；如果EXTI_IMR设置为1时，最终4电路输出的信号才由编号 3电路的输出信号决定，这样我们可以简单的控制EXTI_IMR来实现是否产生中断的目的。4电路输出的信号会被保存到挂起寄存器(EXTI_PR)内，如果确定4电路输出为1就会把EXTI_PR对应位置1。<br>5.最左侧靠上的电路是将EXTI_PR寄存器内容输出到NVIC内，从而实现系统中断事件控制。<br>6.下面的半圆形电路是一个与门电路，它一个输入来自3电路，另外一个输入来自事件屏蔽寄存器(EXTI_EMR)。如果EXTI_EMR设置为0，不管3电路的输出信号是1还是0，最终编号6电路输出的信号都为0；如果EXTI_EMR设置为1时，最终6电路输出的信号才由3电路的输出信号决定，这样我们可以简单的控制EXTI_EMR来实现是否产生事件的目的。<br>7.脉冲发生器电路，当它的输入端，即6电路的输出端，是一个有效<br>信号1时就会产生一个脉冲；如果输入端是无效信号就不会输出脉冲。<br>8.脉冲信号（最左侧最下面），是产生事件的线路最终的产物，这个脉冲信号可以给其他外设电路使用，比如定时器TIM、模拟数字转换器ADC等等，这样的脉冲信号一般用来触发TIM或者ADC开始转换。</p>
+<h2 id="EXTI基本功能"><a href="#EXTI基本功能" class="headerlink" title="EXTI基本功能"></a>EXTI基本功能</h2><p>EXTI可分为两大部分功能，一个是产生中断，另一个是产生事件，这两个功能从硬件上就有所不同。<br><em>中断电路：</em>（编号）1——2——3——4——5<br><em>事件电路：</em>（编号）1——2——3——6——7——8<br>产生中断线路目的是把输入信号输入到 NVIC，进一步会运行中断服务函数，实现功能，这样是软件级的。而产生事件线路目的就是传输一个脉冲信号给其他外设使用，并且是电路级别的信号传输，属于硬件级的。</p>
+<h1 id="中断-事件线"><a href="#中断-事件线" class="headerlink" title="中断/事件线"></a>中断/事件线</h1><p>EXTI有20个中断/事件线，每个GPIO都可以被设置为输入线，占用 EXTI0 至EXTI15，还有另外4根用于特定的外设事件，4根特定外设中断/事件线由外设触发，具体用法参考《STM32F10X-中文参考手册》 。<br>例：EXTI0可以通过AFIO的外部中断配置寄存器 1(AFIO_EXTICR1)的<br>EXTI0[3:0]位选择配置为 PA0、PB0、PC0、PD0、PE0、PF0、PG0、PH0 或者 PI0。</p>
+<h1 id="中断服务函数"><a href="#中断服务函数" class="headerlink" title="中断服务函数"></a>中断服务函数</h1><p>中断服务函数的名字是在MDK中事先有定义的。说明，STM32的IO口外部中断函数只有6个。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">EXPORT EXTI0_IRQHandler</span><br><span class="line">EXPORT EXTI1_IRQHandler</span><br><span class="line">EXPORT EXTI2_IRQHandler</span><br><span class="line">EXPORT EXTI3_IRQHandler</span><br><span class="line">EXPORT EXTI4_IRQHandler</span><br><span class="line">EXPORT EXTI9_5_IRQHandler</span><br><span class="line">EXPORT EXTI15_10_IRQHandler</span><br></pre></td></tr></table></figure></p>
+<p>常用的中断服务函数格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">void EXTI3_IRQHandler(void)</span><br><span class="line">&#123;</span><br><span class="line">if(EXTI_GetITStatus(EXTI_Line3)!=RESET)//判断某个线上的中断是否发生</span><br><span class="line">&#123;</span><br><span class="line">中断逻辑…</span><br><span class="line">EXTI_ClearITPendingBit(EXTI_Line3); //清除 LINE 上的中断标志位</span><br><span class="line">&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="EXTI寄存器"><a href="#EXTI寄存器" class="headerlink" title="EXTI寄存器"></a>EXTI寄存器</h1><p>有待补充。。。。。。</p>
+<h1 id="编程相关"><a href="#编程相关" class="headerlink" title="编程相关"></a>编程相关</h1><h2 id="使用-IO-口外部中断的一般步骤"><a href="#使用-IO-口外部中断的一般步骤" class="headerlink" title="使用 IO 口外部中断的一般步骤"></a>使用 IO 口外部中断的一般步骤</h2><p>1）初始化 IO 口为输入。<br>2）开启 AFIO 时钟<br>3）设置 IO 口与中断线的映射关系。<br>4）初始化线上中断，设置触发条件等。<br>5）配置中断分组（NVIC），并使能中断。<br>6）编写中断服务函数。</p>
+<h2 id="相关库函数"><a href="#相关库函数" class="headerlink" title="相关库函数"></a>相关库函数</h2><h3 id="EXTI初始化结构体"><a href="#EXTI初始化结构体" class="headerlink" title="EXTI初始化结构体"></a>EXTI初始化结构体</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1 typedef struct &#123;</span><br><span class="line">2 uint32_t EXTI_Line; // 中断/事件线</span><br><span class="line">3 EXTIMode_TypeDef EXTI_Mode; // EXTI 模式</span><br><span class="line">4 EXTITrigger_TypeDef EXTI_Trigger; // 触发类型</span><br><span class="line">5 FunctionalState EXTI_LineCmd; // EXTI 使能</span><br><span class="line">6 &#125; EXTI_InitTypeDef;</span><br></pre></td></tr></table></figure>
+<p>1)EXTI_Line：EXTI中断/事件线选择，可选 EXTI0至 EXTI19。<br>2)EXTI_Mode：EXTI模式选择，可选为产生中断。(EXTI_Mode_Interrupt)或者产生事件(EXTI_Mode_Event)。<br>3)EXTI_Trigger：EXTI 边沿触发事件，可选上升沿触发(EXTI_Trigger_Rising)、下降沿触发(EXTI_Trigger_Falling)或者上 升沿和下降沿都触发(EXTI_Trigger_Rising_Falling)。<br>4)EXTI_LineCmd：控制是否使能EXTI线，可选使能EXTI线(ENABLE)或禁用(DISABLE)。</p>
+<h3 id="相关库函数-1"><a href="#相关库函数-1" class="headerlink" title="相关库函数"></a>相关库函数</h3><p>第一个函数是判断某个中断线上的中断是否发生（标志位是否置位）：<br>ITStatus EXTI_GetITStatus(uint32_t EXTI_Line)；<br>这个函数一般使用在中断服务函数的开头判断中断是否发生。<br>另一个函数是清除某个中断线上的中断标志位：<br>void EXTI_ClearITPendingBit(uint32_t EXTI_Line)；<br>这个函数一般应用在中断服务函数结束之前，清除中断标志位。</p>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">void EXTIX_Init(void)</span><br><span class="line">&#123;</span><br><span class="line">EXTI_InitTypeDef EXTI_InitStructure;</span><br><span class="line">NVIC_InitTypeDef NVIC_InitStructure;</span><br><span class="line">KEY_Init(); //①按键端口初始化</span><br><span class="line">RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE); //②开启 AFIO 时钟</span><br><span class="line">//GPIOE.2 中断线以及中断初始化配置,下降沿触发</span><br><span class="line">GPIO_EXTILineConfig(GPIO_PortSourceGPIOE,GPIO_PinSource2);//③</span><br><span class="line">EXTI_InitStructure.EXTI_Line=EXTI_Line2;</span><br><span class="line">EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;</span><br><span class="line">EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling; //下降沿触发</span><br><span class="line">EXTI_InitStructure.EXTI_LineCmd = ENABLE;</span><br><span class="line">EXTI_Init(&amp;EXTI_InitStructure); //④初始化中断线参数</span><br><span class="line">NVIC_InitStructure.NVIC_IRQChannel = EXTI2_IRQn; //使能按键外部中断通道</span><br><span class="line">NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x02; //抢占优先级 2，</span><br><span class="line">NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x02; //子优先级 2</span><br><span class="line">NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; //使能外部中断通道</span><br><span class="line">NVIC_Init(&amp;NVIC_InitStructure);//⑤初始化 NVIC</span><br><span class="line">&#125;</span><br><span class="line">//⑥外部中断 2 服务程序</span><br><span class="line">void EXTI2_IRQHandler(void)</span><br><span class="line">&#123;</span><br><span class="line">delay_ms(10); //消抖</span><br><span class="line">if(KEY2==0) //按键 KEY2</span><br><span class="line">&#123;</span><br><span class="line">LED0=!LED0;</span><br><span class="line">&#125; </span><br><span class="line">EXTI_ClearITPendingBit(EXTI_Line2); //清除 LINE2 上的中断标志位</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h1><p>欢迎大家批评指正。<br><strong><em>我所写的都是参考的《STM32F1开发指南V3.1库函数版本ALIENTEK  战舰STM32F103开发板教程》、《零死角玩转STM32–基于野火F103[霸道]》以及《STM32F10x中文参考手册》。</em></strong></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/基础知识总结/" rel="tag"># 基础知识总结</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/02/gps模块/" rel="next" title="gps模块">
+                <i class="fa fa-chevron-left"></i> gps模块
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MjgyNy8xOTM3NA=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">尤哲鹏</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#EXTI为外部中断-事件控制器，是NVIC的实例应用。我将总结一下有关EXTI的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。"><span class="nav-number">1.</span> <span class="nav-text">EXTI为外部中断/事件控制器，是NVIC的实例应用。我将总结一下有关EXTI的基本知识、寄存器部分以及编程相关。如果有错误、不足或不妥的地方，欢迎大家指出。</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#EXTI基本知识"><span class="nav-number"></span> <span class="nav-text">EXTI基本知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EXTI框图分析"><span class="nav-number">2.</span> <span class="nav-text">EXTI框图分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EXTI基本功能"><span class="nav-number">3.</span> <span class="nav-text">EXTI基本功能</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#中断-事件线"><span class="nav-number"></span> <span class="nav-text">中断/事件线</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#中断服务函数"><span class="nav-number"></span> <span class="nav-text">中断服务函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EXTI寄存器"><span class="nav-number"></span> <span class="nav-text">EXTI寄存器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编程相关"><span class="nav-number"></span> <span class="nav-text">编程相关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-IO-口外部中断的一般步骤"><span class="nav-number">1.</span> <span class="nav-text">使用 IO 口外部中断的一般步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关库函数"><span class="nav-number">2.</span> <span class="nav-text">相关库函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#EXTI初始化结构体"><span class="nav-number">2.1.</span> <span class="nav-text">EXTI初始化结构体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#相关库函数-1"><span class="nav-number">2.2.</span> <span class="nav-text">相关库函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例"><span class="nav-number">2.3.</span> <span class="nav-text">实例</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#写在后面"><span class="nav-number"></span> <span class="nav-text">写在后面</span></a></li></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">尤哲鹏</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.0.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+  
+  <script color="0,0,255" opacity="0.5" zindex="-1" count="99" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.0"></script>
+
+  <script src="/js/src/motion.js?v=7.0.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/affix.js?v=7.0.0"></script>
+
+  <script src="/js/src/schemes/pisces.js?v=7.0.0"></script>
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.0"></script>
+<script src="/js/src/post-details.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=7.0.0"></script>
+
+
+
+  
+
+
+  
+    <script>
+  window.livereOptions = {
+    refer: '2019/03/10/EXTI/'
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</body>
+</html>
